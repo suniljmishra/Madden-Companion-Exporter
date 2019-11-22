@@ -5,13 +5,13 @@ const app = express();
 
 // TODO: Enter the path to your service account json file
 // Need help with this step go here: https://firebase.google.com/docs/admin/setup
-// const serviceAccount = require("./REPLACE_WITH_SERVICE_ACCOUNT.json");
+const serviceAccount = require("./serviceAccountKey.json");
 
 // TODO: Enter your database url from firebase
-// admin.initializeApp({
-//   credential: admin.credential.cert(serviceAccount),
-//   databaseURL: "https://<DATABASE_NAME>.firebaseio.com/"
-// });
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: "https://madden-b94a7.firebaseio.com"
+});
 
 app.set('port', (process.env.PORT || 3001));
 
@@ -28,7 +28,7 @@ app.post('/:username/:platform/:leagueId/leagueteams', (req, res) => {
     });
     req.on('end', () => {
         const { leagueTeamInfoList: teams } = JSON.parse(body);
-        const {params: { username, leagueId }} = req;
+        const { params: { username, leagueId } } = req;
 
         teams.forEach(team => {
             const teamRef = ref.child(`data/${username}/${leagueId}/teams/${team.teamId}`);
@@ -48,7 +48,7 @@ app.post('/:username/:platform/:leagueId/standings', (req, res) => {
     });
     req.on('end', () => {
         const { teamStandingInfoList: teams } = JSON.parse(body);
-        const {params: { username, leagueId }} = req;
+        const { params: { username, leagueId } } = req;
 
         teams.forEach(team => {
             const teamRef = ref.child(
